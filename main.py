@@ -37,12 +37,16 @@ def ohw(df):
 data = load_name_data()
 ohw_data = ohw(data)
 
-st.title("My Cool Name App")
+st.title("Name Dropper")
 
 with st.sidebar:
     input_name = st.text_input("Enter a name:")
     year_input = st.slider("Year", min_value=1880, max_value=2023, value=2000)
-    n_names = st.radio("Number of names per sex", [3, 5, 10])
+    st.write("**Rate this app:**")
+    sentiment_mapping = ["one", "two", "three", "four", "five"]
+    selected = st.feedback("stars")
+    if selected is not None:
+        st.markdown(f"You selected {sentiment_mapping[selected]} star(s).")
 
 tab1, tab2 = st.tabs(["Names", "Year"])
 
@@ -53,10 +57,16 @@ with tab1:
     st.plotly_chart(fig)
 
 with tab2:
-    fig2 = top_names_plot(data, year=year_input, n=n_names)
+    on = st.toggle("Filter by number of names per sex")
+    if on:
+        n_names = st.radio("Number of names per sex", [3, 5, 10])
+        fig2 = top_names_plot(data, year=year_input, n=n_names)
+    else:
+        fig2 = top_names_plot(data, year=year_input, n=5)
 
     st.plotly_chart(fig2)
 
-    st.write("Unique Names Table")
-    output_table = unique_names_summary(data, year=year_input)
-    st.dataframe(output_table)
+    with st.expander("See unique names table"):
+        st.write(f"Unique Names Table ({year_input})")
+        output_table = unique_names_summary(data, year=year_input)
+        st.dataframe(output_table)
