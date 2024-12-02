@@ -37,7 +37,7 @@ st.title("Name Dropper")
 
 with st.sidebar:
     input_name = st.text_input("Enter a name:")
-    year_input = st.slider("Year", min_value=1880, max_value=2023, value=2000)
+    year_input = st.slider("Year", min_value=1880, max_value=2023, value=2023)
     st.write("**Rate this app:**")
     sentiment_mapping = ["one", "two", "three", "four", "five"]
     selected = st.feedback("stars")
@@ -62,7 +62,6 @@ with tab2:
 
     st.plotly_chart(fig2)
 
-    with st.expander("See unique names table"):
-        st.write(f"Unique Names Table ({year_input})")
+    with st.expander(f"See unique names table for {year_input}"):
         output_table = unique_names_summary(data, year=year_input)
         st.dataframe(output_table)
